@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ID Card Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root{
+    --purple:#3B2E82;
+    --orange:#F5821F;
+    --green:#6DBE45;
+    --gold:#F4B942;
+    --navy:#1B1F5C;
+    --blue:#2447D6;
+    --paper:#F3F1EC;
+    --panel:#FFFFFF;
+    --muted:#6B7280;
+    --line:#E4E0D6;
+    --good:#3D7A5C;
+    --bad:#B4483C;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    background-image:radial-gradient(circle at 1px 1px, rgba(27,31,92,0.06) 1px, transparent 0);
+    background-size:22px 22px;
+    color:#23283A;
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+  }
+  .topbar{padding:28px clamp(16px,4vw,48px) 8px; display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;}
+  .topbar h1{font-family:'Poppins',sans-serif;font-size:clamp(22px,3vw,30px);font-weight:800;margin:0;color:var(--navy);letter-spacing:-0.01em;}
+  .topbar .eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);background:var(--panel);border:1px solid var(--line);padding:4px 10px;border-radius:100px;}
+  .topbar p.sub{width:100%;margin:6px 0 0;color:var(--muted);font-size:14px;}
+
+  .layout{display:grid;grid-template-columns:minmax(320px,460px) 1fr;gap:0;align-items:start;padding:16px clamp(16px,4vw,48px) 64px;}
+  @media (max-width:900px){.layout{grid-template-columns:1fr;}}
+
+  .form-panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 1px 2px rgba(27,31,92,0.05);}
+  fieldset{border:none;margin:0 0 20px;padding:0;}
+  legend{font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--navy);padding:0 0 10px;border-bottom:1px solid var(--line);width:100%;margin-bottom:14px;}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:5px;}
+  .field input[type=text],.field input[type=email],.field input[type=tel],.field select,.field textarea{
+    width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:9px;font-family:'Inter',sans-serif;font-size:14px;color:#23283A;background:#FCFBF8;transition:border-color .15s;
+  }
+  .field textarea{resize:vertical;min-height:56px;}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--orange);background:#fff;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  @media (max-width:480px){.row2,.row3{grid-template-columns:1fr;}}
+
+  .upload-drop{border:1.5px dashed #9E97C4;border-radius:12px;padding:14px;text-align:center;background:#FCFBF8;cursor:pointer;position:relative;}
+  .upload-drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+  .upload-drop .hint{font-size:12.5px;color:var(--muted);}
+  .upload-drop .hint b{color:var(--navy);}
+  .upload-thumb{width:56px;height:56px;border-radius:8px;object-fit:cover;margin:0 auto 8px;display:block;border:1px solid var(--line);}
+
+  .empid-row{display:flex;gap:8px;}
+  .empid-row input{flex:1;}
+  .btn-mini{border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:0 12px;font-size:16px;cursor:pointer;color:var(--navy);}
+  .btn-mini:hover{border-color:var(--orange);}
+
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
+  .btn{font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;padding:12px 18px;border-radius:10px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:transform .1s, box-shadow .15s;}
+  .btn:active{transform:translateY(1px);}
+  .btn-primary{background:var(--navy);color:#fff;}
+  .btn-primary:hover{box-shadow:0 4px 14px rgba(27,31,92,0.3);}
+  .btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--line);}
+  .btn-ghost:hover{border-color:var(--navy);}
+  .btn:disabled{opacity:.55;cursor:not-allowed;}
+
+  .preview-panel{position:sticky;top:20px;padding:24px clamp(8px,3vw,40px);display:flex;flex-direction:column;align-items:center;gap:18px;}
+  .side-toggle{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:100px;padding:4px;gap:4px;}
+  .side-toggle button{border:none;background:transparent;padding:8px 18px;border-radius:100px;font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;color:var(--muted);cursor:pointer;}
+  .side-toggle button.active{background:var(--navy);color:#fff;}
+
+  .card-stage{width:300px;max-width:88vw;}
+  .card{
+    width:100%;aspect-ratio:54/85.6;border-radius:20px;position:relative;overflow:hidden;
+    box-shadow:0 18px 40px -12px rgba(27,31,92,0.35), 0 2px 8px rgba(27,31,92,0.15);
+    background:var(--panel);font-family:'Inter',sans-serif;display:none;
+  }
+  .card.visible{display:block;}
+
+  /* ---- shared diagonal corner accents ---- */
+  .corner-tl{position:absolute;top:0;left:0;width:78%;height:26%;background:var(--purple);clip-path:polygon(0 0,100% 0,55% 100%,0 65%);z-index:0;}
+  .corner-bl{position:absolute;left:-10%;bottom:-6%;width:55%;height:16%;background:var(--purple);border-top-right-radius:60px;z-index:0;}
+  .corner-bl-dot{position:absolute;left:8%;bottom:2%;width:15%;aspect-ratio:1;border-radius:50%;background:var(--gold);z-index:0;}
+
+  /* ---- FRONT ---- */
+  .card-front{position:relative;height:100%;display:flex;flex-direction:column;}
+  .front-header{position:relative;height:34%;background:var(--orange);flex-shrink:0;overflow:visible;}
+  .front-header .brand{position:absolute;top:9%;right:6%;text-align:right;z-index:2;}
+  .front-header .brand .l1,.front-header .brand .l2{font-family:'Poppins',sans-serif;font-weight:800;font-size:13px;color:var(--blue);line-height:1.15;}
+  .logo-box{
+    position:absolute;top:6%;right:6%;width:15%;aspect-ratio:1;background:#fff;border-radius:6px;
+    align-items:center;justify-content:center;overflow:hidden;z-index:2;box-shadow:0 1px 4px rgba(0,0,0,0.15);
+    display:none;
+  }
+  .logo-box img{width:100%;height:100%;object-fit:contain;}
+  .brand-with-logo .brand{right:24%;}
+
+  .hex-wrap{
+    position:absolute;left:50%;bottom:-22%;transform:translateX(-50%);
+    width:58%;z-index:3;
+  }
+  .hex-outer{
+    width:100%;aspect-ratio:1;
+    clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background:var(--green);padding:5px;
+  }
+  .hex-inner{
+    width:100%;height:100%;
+    clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background:#fff;padding:4px;
+  }
+  .hex-photo{
+    width:100%;height:100%;
+    clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    object-fit:cover;background:#EDEAE1 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="%23c9c4b6"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" fill="%23c9c4b6"/></svg>') center/34% no-repeat;
+  }
+
+  .front-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:24% 16px 10px;position:relative;z-index:1;}
+  .id-name{font-family:'Poppins',sans-serif;font-weight:800;font-size:16.5px;color:var(--navy);text-align:center;line-height:1.15;word-break:break-word;}
+  .id-role-pill{
+    margin-top:8px;background:var(--gold);color:var(--navy);font-family:'Poppins',sans-serif;font-weight:700;
+    font-size:9.5px;padding:5px 14px;border-radius:100px;text-transform:none;
+  }
+  .id-details{width:100%;margin-top:12px;display:flex;flex-direction:column;gap:5px;}
+  .id-details .drow{display:flex;font-size:9px;gap:5px;}
+  .id-details .drow b.lbl{min-width:44px;color:var(--navy);font-weight:700;font-family:'Poppins',sans-serif;}
+  .id-details .drow span.val{color:#3a3f52;font-family:'Space Mono',monospace;font-size:8.5px;word-break:break-word;}
+  .id-address{margin-top:8px;width:100%;}
+  .id-address b.lbl{font-size:9px;color:var(--navy);font-weight:700;font-family:'Poppins',sans-serif;display:block;margin-bottom:2px;}
+  .id-address span.val{font-size:8px;color:#3a3f52;line-height:1.35;display:block;}
+
+  .stamp-zone{margin-top:auto;padding-top:8px;display:flex;justify-content:center;align-items:center;}
+  .stamp-circle{
+    width:66px;height:66px;border-radius:50%;border:1.6px dashed #B9B3D6;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    font-family:'Poppins',sans-serif;font-size:6.6px;font-weight:700;color:#9E97C4;text-transform:uppercase;letter-spacing:.04em;
+    overflow:hidden;
+  }
+  .stamp-circle img{width:100%;height:100%;object-fit:contain;border-radius:50%;}
+
+  /* ---- BACK ---- */
+  .card-back{position:relative;height:100%;display:flex;flex-direction:column;}
+  .back-header{position:relative;height:15%;background:var(--orange);flex-shrink:0;}
+  .back-title-wrap{padding:16px 18px 4px;position:relative;z-index:1;}
+  .back-title{font-family:'Poppins',sans-serif;font-weight:800;font-size:15px;color:var(--navy);line-height:1.15;}
+  .back-underline{width:34px;height:3px;background:var(--green);border-radius:3px;margin:8px 0 12px;}
+  .back-instructions{padding:0 18px;flex:1;overflow:hidden;position:relative;z-index:1;}
+  .back-instructions .instr{font-size:8.6px;color:#3a3f52;line-height:1.45;margin-bottom:8px;}
+  .back-instructions .instr b{color:var(--navy);font-family:'Poppins',sans-serif;}
+  .back-idpill-wrap{display:flex;justify-content:center;margin:6px 0 10px;position:relative;z-index:1;}
+  .back-idpill{background:var(--gold);color:var(--navy);font-family:'Poppins',sans-serif;font-weight:700;font-size:9px;padding:6px 16px;border-radius:100px;}
+  .back-emergency{padding:0 18px 4px;position:relative;z-index:1;}
+  .back-emergency .lbl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+  .back-emergency .val{font-size:11px;color:var(--bad);font-weight:700;font-family:'Space Mono',monospace;}
+  .back-foot{margin-top:auto;padding:10px 18px 16px;display:flex;align-items:center;gap:6px;position:relative;z-index:1;font-size:8.5px;color:var(--navy);font-weight:600;}
+  .back-foot .globe{width:11px;height:11px;flex-shrink:0;}
+
+  .pdf-hint{font-size:12.5px;color:var(--muted);text-align:center;max-width:340px;}
+  .status-line{font-size:12.5px;color:var(--good);font-weight:600;min-height:18px;}
+  .status-line.err{color:var(--bad);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>ID Card Generator</h1>
+  <span class="eyebrow">Fill · Preview · Export PDF</span>
+  <p class="sub">Enter your details, upload a photo, and download a print-ready ID card. Nothing is uploaded anywhere — everything happens in your browser.</p>
+</div>
+
+<div class="layout">
+
+  <!-- FORM -->
+  <div class="form-panel">
+
+    <fieldset>
+      <legend>Company</legend>
+      <div class="row2">
+        <div class="field">
+          <label for="orgL1">Company name — line 1</label>
+          <input type="text" id="orgL1" value="Rudra">
+        </div>
+        <div class="field">
+          <label for="orgL2">Company name — line 2</label>
+          <input type="text" id="orgL2" value="Geotech">
+        </div>
+      </div>
+      <div class="field">
+        <label>Company logo (optional)</label>
+        <div class="upload-drop" id="logoDrop">
+          <img id="logoThumb" class="upload-thumb" style="display:none;">
+          <div class="hint" id="logoHint"><b>Upload logo</b> — shown top right</div>
+          <input type="file" id="logoInput" accept="image/*">
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Photo</legend>
+      <div class="upload-drop" id="photoDrop">
+        <img id="photoThumb" class="upload-thumb" style="display:none;">
+        <div class="hint" id="photoHint"><b>Tap to upload a photo</b><br>from your gallery or camera</div>
+        <input type="file" id="photoInput" accept="image/*">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Employee details</legend>
+      <div class="field">
+        <label for="name">Full name</label>
+        <input type="text" id="name" placeholder="Bharat Thakur">
+      </div>
+      <div class="field">
+        <label for="role">Designation</label>
+        <input type="text" id="role" placeholder="Field Incharge">
+      </div>
+      <div class="field">
+        <label for="empId">Employee ID (auto‑generated)</label>
+        <div class="empid-row">
+          <input type="text" id="empId" placeholder="RG0001">
+          <button type="button" class="btn-mini" id="regenBtn" title="Generate new ID">↻</button>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="phone">Mobile no.</label>
+          <input type="tel" id="phone" placeholder="9015363923">
+        </div>
+        <div class="field">
+          <label for="blood">Blood group</label>
+          <select id="blood">
+            <option value="">—</option>
+            <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
+          </select>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="email">Email ID</label>
+          <input type="email" id="email" placeholder="name@example.com">
+        </div>
+        <div class="field">
+          <label for="validUpto">Valid upto</label>
+          <input type="date" id="validUpto">
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Address (filled by employee)</legend>
+      <div class="row3">
+        <div class="field">
+          <label for="village">Village</label>
+          <input type="text" id="village" placeholder="Village name">
+        </div>
+        <div class="field">
+          <label for="po">P.O.</label>
+          <input type="text" id="po" placeholder="Post office">
+        </div>
+        <div class="field">
+          <label for="distt">Distt.</label>
+          <input type="text" id="distt" placeholder="District">
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Company stamp</legend>
+      <div class="upload-drop" id="stampDrop">
+        <img id="stampThumb" class="upload-thumb" style="display:none;">
+        <div class="hint" id="stampHint"><b>Upload stamp image</b> — shown bottom of card</div>
+        <input type="file" id="stampInput" accept="image/*">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Back side</legend>
+      <div class="field">
+        <label for="instructions">General instructions</label>
+        <textarea id="instructions" style="min-height:110px;">Identification: Carry the ID card at all times during working hours for identification purposes.
+
+Authorized Use: The ID card is strictly for official use and should not be shared or used for unauthorized purposes.</textarea>
+      </div>
+      <div class="field">
+        <label for="emergency">Emergency contact number</label>
+        <input type="tel" id="emergency" placeholder="9000000000">
+      </div>
+      <div class="field">
+        <label for="contactEmail">Company contact email</label>
+        <input type="email" id="contactEmail" placeholder="company@example.com">
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="downloadBtn">⬇ Download PDF</button>
+      <button class="btn btn-ghost" id="saveBtn">☁ Save to Company Sheet</button>
+      <button class="btn btn-ghost" id="resetBtn">Reset form</button>
+    </div>
+    <div class="status-line" id="statusLine"></div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="preview-panel">
+    <div class="side-toggle">
+      <button id="tabFront" class="active">Front</button>
+      <button id="tabBack">Back</button>
+    </div>
+
+    <div class="card-stage">
+      <div class="card visible" id="cardFront">
+        <div class="card-front">
+          <div class="front-header" id="frontHeader">
+            <div class="logo-box" id="logoBox"><img id="logoImg"></div>
+            <div class="brand">
+              <div class="l1" id="pOrgL1">Rudra</div>
+              <div class="l2" id="pOrgL2">Geotech</div>
+            </div>
+            <div class="hex-wrap">
+              <div class="hex-outer"><div class="hex-inner">
+                <img class="hex-photo" id="pPhoto">
+              </div></div>
+            </div>
+          </div>
+          <div class="front-body">
+            <div class="id-name" id="pName">Full Name</div>
+            <div class="id-role-pill" id="pRole">Designation</div>
+            <div class="id-details">
+              <div class="drow"><b class="lbl">ID No</b><span class="val" id="pEmpId">RG0001</span></div>
+              <div class="drow"><b class="lbl">Mobile</b><span class="val" id="pPhone">—</span></div>
+              <div class="drow"><b class="lbl">Email</b><span class="val" id="pEmail">—</span></div>
+              <div class="drow"><b class="lbl">Blood</b><span class="val" id="pBlood">—</span></div>
+              <div class="drow"><b class="lbl">Valid</b><span class="val" id="pValidUpto">—</span></div>
+            </div>
+            <div class="id-address">
+              <b class="lbl">Address</b>
+              <span class="val" id="pAddress">—</span>
+            </div>
+            <div class="stamp-zone">
+              <div class="stamp-circle" id="stampCircle">Company Stamp</div>
+            </div>
+          </div>
+          <div class="corner-bl"></div>
+          <div class="corner-bl-dot"></div>
+        </div>
+      </div>
+
+      <div class="card" id="cardBack">
+        <div class="card-back">
+          <div class="back-header"></div>
+          <div class="back-title-wrap">
+            <div class="back-title">Terms &amp;<br>Conditions</div>
+            <div class="back-underline"></div>
+          </div>
+          <div class="back-instructions" id="bInstructions"></div>
+          <div class="back-idpill-wrap"><div class="back-idpill" id="bEmpId">ID Number: RG0001</div></div>
+          <div class="back-emergency">
+            <div class="lbl">Emergency contact</div>
+            <div class="val" id="bEmergency">—</div>
+          </div>
+          <div class="back-foot">
+            <span id="bContactEmail">—</span>
+          </div>
+          <div class="corner-bl"></div>
+          <div class="corner-bl-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="pdf-hint">The PDF is generated at real ID card size (54 × 85.6 mm) with front and back on separate pages — ready to print and laminate.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+
+  // ── CONFIG ─────────────────────────────────────────────────────────
+  // Paste your Google Apps Script Web App URL here before sharing this
+  // file with your team (see setup instructions provided separately).
+  // Leave blank to hide the "Save to Company Sheet" button.
+  const CONFIG = {
+    GAS_URL: ''  // e.g. 'https://script.google.com/macros/library/d/1xfnOUBwGgx4tO5iTIzGYEXhN9cMS3aita6M4cwxsfzXyT0obmzY4Oo1d/8'
+  };
+  if(!CONFIG.GAS_URL){ $('saveBtn').style.display = 'none'; }
+
+  let uploadedPhotoDataUrl = null;
+
+  function genEmpId(){
+    const n = Math.floor(1 + Math.random()*9998);
+    return 'RG' + String(n).padStart(4,'0');
+  }
+  $('empId').value = genEmpId();
+  $('regenBtn').addEventListener('click', ()=>{ $('empId').value = genEmpId(); render(); });
+
+  const textFields = ['orgL1','orgL2','name','role','empId','phone','email','blood','village','po','distt','instructions','emergency','contactEmail','validUpto'];
+  const defaults = {};
+  textFields.forEach(f => defaults[f] = $(f).value);
+
+  function fmtDate(d){
+    if(!d) return '—';
+    const dt = new Date(d+'T00:00:00');
+    if(isNaN(dt)) return '—';
+    return dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  }
+
+  function buildAddress(){
+    const parts = [];
+    if($('village').value) parts.push('Vill. ' + $('village').value);
+    if($('po').value) parts.push('P.O. ' + $('po').value);
+    if($('distt').value) parts.push('Distt. ' + $('distt').value);
+    return parts.length ? parts.join(', ') : '—';
+  }
+
+  function render(){
+    $('pOrgL1').textContent = $('orgL1').value || 'Company';
+    $('pOrgL2').textContent = $('orgL2').value || '';
+    $('pName').textContent = $('name').value || 'Full Name';
+    $('pRole').textContent = $('role').value || 'Designation';
+    $('pEmpId').textContent = $('empId').value || '—';
+    $('pPhone').textContent = $('phone').value || '—';
+    $('pEmail').textContent = $('email').value || '—';
+    $('pBlood').textContent = $('blood').value || '—';
+    $('pValidUpto').textContent = fmtDate($('validUpto').value);
+    $('pAddress').textContent = buildAddress();
+
+    $('bInstructions').innerHTML = '';
+    ($('instructions').value || '').split(/\n+/).filter(Boolean).forEach(line=>{
+      const p = document.createElement('div');
+      p.className = 'instr';
+      p.textContent = line;
+      $('bInstructions').appendChild(p);
+    });
+    $('bEmpId').textContent = 'ID Number: ' + ($('empId').value || '—');
+    $('bEmergency').textContent = $('emergency').value || '—';
+    $('bContactEmail').textContent = $('contactEmail').value || '—';
+  }
+  textFields.forEach(f => $(f).addEventListener('input', render));
+  render();
+
+  // generic image upload wiring
+  function wireUpload(inputId, thumbId, hintId, hintHtml, onLoaded){
+    const input = $(inputId), thumb = $(thumbId), hint = $(hintId);
+    input.addEventListener('change', e=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ev=>{
+        thumb.src = ev.target.result;
+        thumb.style.display = 'block';
+        hint.innerHTML = hintHtml;
+        onLoaded(ev.target.result);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  wireUpload('photoInput','photoThumb','photoHint','<b>Photo selected</b><br>tap to change', src=>{
+    const p = $('pPhoto');
+    p.src = src; p.style.backgroundImage = 'none';
+    uploadedPhotoDataUrl = src;
+  });
+
+  wireUpload('logoInput','logoThumb','logoHint','<b>Logo selected</b> — tap to change', src=>{
+    $('logoImg').src = src;
+    $('logoBox').style.display = 'flex';
+    $('frontHeader').classList.add('brand-with-logo');
+  });
+
+  wireUpload('stampInput','stampThumb','stampHint','<b>Stamp selected</b> — tap to change', src=>{
+    const circle = $('stampCircle');
+    circle.innerHTML = '<img src="'+src+'">';
+  });
+
+  // tabs
+  const cardFront = $('cardFront'), cardBack = $('cardBack');
+  const tabFront = $('tabFront'), tabBack = $('tabBack');
+  tabFront.addEventListener('click', ()=>{
+    cardFront.classList.add('visible'); cardBack.classList.remove('visible');
+    tabFront.classList.add('active'); tabBack.classList.remove('active');
+  });
+  tabBack.addEventListener('click', ()=>{
+    cardBack.classList.add('visible'); cardFront.classList.remove('visible');
+    tabBack.classList.add('active'); tabFront.classList.remove('active');
+  });
+
+  // reset
+  $('resetBtn').addEventListener('click', ()=>{
+    textFields.forEach(f => $(f).value = defaults[f]);
+    $('empId').value = genEmpId();
+    ['photo','logo','stamp'].forEach(k=>{
+      $(k+'Thumb').style.display='none';
+      $(k+'Input').value = '';
+    });
+    $('photoHint').innerHTML = '<b>Tap to upload a photo</b><br>from your gallery or camera';
+    $('logoHint').innerHTML = '<b>Upload logo</b> — shown top right';
+    $('stampHint').innerHTML = '<b>Upload stamp image</b> — shown bottom of card';
+    $('pPhoto').removeAttribute('src');
+    $('pPhoto').style.backgroundImage = "url('data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 24 24\\'><circle cx=\\'12\\' cy=\\'8\\' r=\\'4\\' fill=\\'%23c9c4b6\\'/><path d=\\'M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8\\' fill=\\'%23c9c4b6\\'/></svg>')";
+    $('logoBox').style.display = 'none';
+    $('frontHeader').classList.remove('brand-with-logo');
+    $('stampCircle').innerHTML = 'Company Stamp';
+    render();
+    $('statusLine').textContent = '';
+  });
+
+  // Save submission to Google Sheet via Apps Script web app
+  $('saveBtn').addEventListener('click', async ()=>{
+    if(!CONFIG.GAS_URL){ return; }
+    const btn = $('saveBtn');
+    const status = $('statusLine');
+    btn.disabled = true;
+    status.classList.remove('err');
+    status.textContent = uploadedPhotoDataUrl ? 'Uploading photo & saving…' : 'Saving to sheet…';
+
+    const payload = {
+      empId: $('empId').value,
+      name: $('name').value,
+      role: $('role').value,
+      blood: $('blood').value,
+      phone: $('phone').value,
+      emergency: $('emergency').value,
+      village: $('village').value,
+      po: $('po').value,
+      distt: $('distt').value,
+      validUpto: $('validUpto').value
+    };
+
+    if(uploadedPhotoDataUrl){
+      const m = uploadedPhotoDataUrl.match(/^data:(.+);base64,(.+)$/);
+      if(m){
+        payload.photoMime = m[1];
+        payload.photoBase64 = m[2];
+      }
+    }
+
+    try{
+      await fetch(CONFIG.GAS_URL, {
+        method:'POST',
+        mode:'no-cors',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify(payload)
+      });
+      status.textContent = 'Saved to company sheet ✓';
+    }catch(err){
+      console.error(err);
+      status.classList.add('err');
+      status.textContent = 'Could not reach the sheet — check your connection.';
+    }finally{
+      btn.disabled = false;
+    }
+  });
+
+  // PDF export — portrait card, 54mm x 85.6mm
+  $('downloadBtn').addEventListener('click', async ()=>{
+    const btn = $('downloadBtn');
+    const status = $('statusLine');
+    btn.disabled = true;
+    status.classList.remove('err');
+    status.textContent = 'Rendering card…';
+
+    const wasBack = cardBack.classList.contains('visible');
+    try{
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ orientation:'portrait', unit:'mm', format:[54,85.6] });
+
+      cardFront.classList.add('visible'); cardBack.classList.remove('visible');
+      await new Promise(r=>setTimeout(r,60));
+      let canvas = await html2canvas(cardFront, {scale:4, backgroundColor:'#ffffff'});
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 54, 85.6);
+
+      pdf.addPage([54,85.6],'portrait');
+      cardBack.classList.add('visible'); cardFront.classList.remove('visible');
+      await new Promise(r=>setTimeout(r,60));
+      canvas = await html2canvas(cardBack, {scale:4, backgroundColor:'#ffffff'});
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 54, 85.6);
+
+      const filename = ($('name').value || 'id-card').trim().toLowerCase().replace(/[^a-z0-9]+/g,'-') + '.pdf';
+      pdf.save(filename);
+      status.textContent = 'Downloaded ✓';
+    }catch(err){
+      console.error(err);
+      status.classList.add('err');
+      status.textContent = 'Something went wrong generating the PDF.';
+    }finally{
+      if(wasBack){ cardBack.classList.add('visible'); cardFront.classList.remove('visible'); }
+      else { cardFront.classList.add('visible'); cardBack.classList.remove('visible'); }
+      btn.disabled = false;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
