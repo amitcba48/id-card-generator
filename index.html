@@ -51,6 +51,7 @@
   }
   .field textarea{resize:vertical;min-height:56px;}
   .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--orange);background:#fff;}
+  .field .subnote{font-size:11px;color:var(--muted);margin-top:4px;}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
   @media (max-width:480px){.row2,.row3{grid-template-columns:1fr;}}
@@ -89,14 +90,14 @@
   .card.visible{display:block;}
 
   /* ---- shared diagonal corner accents ---- */
-  .corner-tl{position:absolute;top:0;left:0;width:78%;height:26%;background:var(--purple);clip-path:polygon(0 0,100% 0,55% 100%,0 65%);z-index:0;}
+  .corner-tl{position:absolute;top:0;left:0;width:80%;height:72%;background:var(--purple);clip-path:polygon(0 0,100% 0,42% 100%,0 58%);z-index:0;}
   .corner-bl{position:absolute;left:-10%;bottom:-6%;width:55%;height:16%;background:var(--purple);border-top-right-radius:60px;z-index:0;}
   .corner-bl-dot{position:absolute;left:8%;bottom:2%;width:15%;aspect-ratio:1;border-radius:50%;background:var(--gold);z-index:0;}
 
   /* ---- FRONT ---- */
   .card-front{position:relative;height:100%;display:flex;flex-direction:column;}
-  .front-header{position:relative;height:34%;background:var(--orange);flex-shrink:0;overflow:visible;}
-  .front-header .brand{position:absolute;top:9%;right:6%;text-align:right;z-index:2;}
+  .front-header{position:relative;height:31%;background:var(--orange);flex-shrink:0;overflow:visible;}
+  .front-header .brand{position:absolute;top:8%;right:6%;text-align:right;z-index:2;}
   .front-header .brand .l1,.front-header .brand .l2{font-family:'Poppins',sans-serif;font-weight:800;font-size:13px;color:var(--blue);line-height:1.15;}
   .logo-box{
     position:absolute;top:6%;right:6%;width:15%;aspect-ratio:1;background:#fff;border-radius:6px;
@@ -107,38 +108,25 @@
   .brand-with-logo .brand{right:24%;}
 
   .hex-wrap{
-    position:absolute;left:50%;bottom:-22%;transform:translateX(-50%);
-    width:58%;z-index:3;
+    position:absolute;top:32%;left:50%;transform:translateX(-50%);
+    width:44%;z-index:3;
   }
-  .hex-outer{
-    width:100%;aspect-ratio:1;
-    clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    background:var(--green);padding:5px;
-  }
-  .hex-inner{
-    width:100%;height:100%;
-    clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    background:#fff;padding:4px;
-  }
-  .hex-photo{
-    width:100%;height:100%;
-    clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    object-fit:cover;background:#EDEAE1 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="%23c9c4b6"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" fill="%23c9c4b6"/></svg>') center/34% no-repeat;
-  }
+  .hex-svg{width:100%;height:100%;display:block;overflow:visible;}
 
-  .front-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:24% 16px 10px;position:relative;z-index:1;}
-  .id-name{font-family:'Poppins',sans-serif;font-weight:800;font-size:16.5px;color:var(--navy);text-align:center;line-height:1.15;word-break:break-word;}
+  .front-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:19% 16px 10px;position:relative;z-index:1;}
+  .id-name{font-family:'Poppins',sans-serif;font-weight:800;font-size:17.5px;color:var(--navy);text-align:center;line-height:1.15;word-break:break-word;}
   .id-role-pill{
     margin-top:8px;background:var(--gold);color:var(--navy);font-family:'Poppins',sans-serif;font-weight:700;
-    font-size:9.5px;padding:5px 14px;border-radius:100px;text-transform:none;
+    font-size:10.5px;padding:5px 14px;border-radius:100px;text-transform:none;
   }
-  .id-details{width:100%;margin-top:12px;display:flex;flex-direction:column;gap:5px;}
-  .id-details .drow{display:flex;font-size:9px;gap:5px;}
-  .id-details .drow b.lbl{min-width:44px;color:var(--navy);font-weight:700;font-family:'Poppins',sans-serif;}
-  .id-details .drow span.val{color:#3a3f52;font-family:'Space Mono',monospace;font-size:8.5px;word-break:break-word;}
-  .id-address{margin-top:8px;width:100%;}
-  .id-address b.lbl{font-size:9px;color:var(--navy);font-weight:700;font-family:'Poppins',sans-serif;display:block;margin-bottom:2px;}
-  .id-address span.val{font-size:8px;color:#3a3f52;line-height:1.35;display:block;}
+  .id-details{width:100%;margin-top:12px;display:flex;flex-direction:column;gap:6px;}
+  .id-details .drow{display:flex;font-size:10px;gap:6px;}
+  .id-details .drow b.lbl{width:70px;flex-shrink:0;color:var(--navy);font-weight:700;font-family:'Poppins',sans-serif;}
+  .id-details .drow span.val{color:#3a3f52;font-family:'Space Mono',monospace;font-size:9.5px;word-break:break-word;}
+  .id-address{margin-top:10px;width:100%;}
+  .id-address b.lbl{font-size:10px;color:var(--navy);font-weight:700;font-family:'Poppins',sans-serif;display:block;margin-bottom:3px;}
+  .id-address .val{font-size:9px;color:#3a3f52;line-height:1.5;}
+  .id-address .val div{}
 
   .stamp-zone{margin-top:auto;padding-top:8px;display:flex;justify-content:center;align-items:center;}
   .stamp-circle{
@@ -151,20 +139,21 @@
 
   /* ---- BACK ---- */
   .card-back{position:relative;height:100%;display:flex;flex-direction:column;}
-  .back-header{position:relative;height:15%;background:var(--orange);flex-shrink:0;}
-  .back-title-wrap{padding:16px 18px 4px;position:relative;z-index:1;}
-  .back-title{font-family:'Poppins',sans-serif;font-weight:800;font-size:15px;color:var(--navy);line-height:1.15;}
-  .back-underline{width:34px;height:3px;background:var(--green);border-radius:3px;margin:8px 0 12px;}
-  .back-instructions{padding:0 18px;flex:1;overflow:hidden;position:relative;z-index:1;}
-  .back-instructions .instr{font-size:8.6px;color:#3a3f52;line-height:1.45;margin-bottom:8px;}
+  .back-header{position:relative;height:13%;background:var(--orange);flex-shrink:0;}
+  .back-title-wrap{padding:16px 18px 4px;position:relative;z-index:1;text-align:center;}
+  .back-title{font-family:'Poppins',sans-serif;font-weight:800;font-size:17px;color:var(--navy);line-height:1.2;}
+  .back-underline{width:36px;height:3px;background:var(--green);border-radius:3px;margin:9px auto 12px;}
+  .back-instructions{padding:0 18px;flex:1;position:relative;z-index:1;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:12px;}
+  .back-instructions .instr{font-size:10.5px;color:#3a3f52;line-height:1.6;}
   .back-instructions .instr b{color:var(--navy);font-family:'Poppins',sans-serif;}
-  .back-idpill-wrap{display:flex;justify-content:center;margin:6px 0 10px;position:relative;z-index:1;}
-  .back-idpill{background:var(--gold);color:var(--navy);font-family:'Poppins',sans-serif;font-weight:700;font-size:9px;padding:6px 16px;border-radius:100px;}
-  .back-emergency{padding:0 18px 4px;position:relative;z-index:1;}
-  .back-emergency .lbl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
-  .back-emergency .val{font-size:11px;color:var(--bad);font-weight:700;font-family:'Space Mono',monospace;}
-  .back-foot{margin-top:auto;padding:10px 18px 16px;display:flex;align-items:center;gap:6px;position:relative;z-index:1;font-size:8.5px;color:var(--navy);font-weight:600;}
-  .back-foot .globe{width:11px;height:11px;flex-shrink:0;}
+  .back-bottom{padding:0 18px 56px;position:relative;z-index:1;text-align:center;}
+  .back-bottom .valid{font-size:9.5px;color:var(--muted);margin-bottom:8px;}
+  .back-bottom .valid b{color:var(--navy);font-family:'Space Mono',monospace;font-weight:700;}
+  .back-emergency{margin-bottom:8px;}
+  .back-emergency .lbl{font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+  .back-emergency .val{font-size:13px;color:var(--bad);font-weight:700;font-family:'Space Mono',monospace;margin-top:2px;}
+  .back-company-email{font-size:9.5px;color:var(--navy);font-weight:700;font-family:'Poppins',sans-serif;margin-bottom:3px;}
+  .back-company-address{font-size:8.5px;color:#3a3f52;line-height:1.45;}
 
   .pdf-hint{font-size:12.5px;color:var(--muted);text-align:center;max-width:340px;}
   .status-line{font-size:12.5px;color:var(--good);font-weight:600;min-height:18px;}
@@ -194,14 +183,6 @@
         <div class="field">
           <label for="orgL2">Company name — line 2</label>
           <input type="text" id="orgL2" value="Geotech">
-        </div>
-      </div>
-      <div class="field">
-        <label>Company logo (optional)</label>
-        <div class="upload-drop" id="logoDrop">
-          <img id="logoThumb" class="upload-thumb" style="display:none;">
-          <div class="hint" id="logoHint"><b>Upload logo</b> — shown top right</div>
-          <input type="file" id="logoInput" accept="image/*">
         </div>
       </div>
     </fieldset>
@@ -234,11 +215,11 @@
       </div>
       <div class="row2">
         <div class="field">
-          <label for="phone">Mobile no.</label>
-          <input type="tel" id="phone" placeholder="9015363923">
+          <label for="phone">Mobile No. (10 digits)</label>
+          <input type="tel" id="phone" placeholder="9015363923" maxlength="10" inputmode="numeric" pattern="[0-9]{10}">
         </div>
         <div class="field">
-          <label for="blood">Blood group</label>
+          <label for="blood">Blood Group</label>
           <select id="blood">
             <option value="">—</option>
             <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
@@ -248,11 +229,11 @@
       </div>
       <div class="row2">
         <div class="field">
-          <label for="email">Email ID</label>
+          <label for="email">Email Id</label>
           <input type="email" id="email" placeholder="name@example.com">
         </div>
         <div class="field">
-          <label for="validUpto">Valid upto</label>
+          <label for="validUpto">Valid upto <span class="subnote">(shown on back)</span></label>
           <input type="date" id="validUpto">
         </div>
       </div>
@@ -277,15 +258,6 @@
     </fieldset>
 
     <fieldset>
-      <legend>Company stamp</legend>
-      <div class="upload-drop" id="stampDrop">
-        <img id="stampThumb" class="upload-thumb" style="display:none;">
-        <div class="hint" id="stampHint"><b>Upload stamp image</b> — shown bottom of card</div>
-        <input type="file" id="stampInput" accept="image/*">
-      </div>
-    </fieldset>
-
-    <fieldset>
       <legend>Back side</legend>
       <div class="field">
         <label for="instructions">General instructions</label>
@@ -294,12 +266,16 @@
 Authorized Use: The ID card is strictly for official use and should not be shared or used for unauthorized purposes.</textarea>
       </div>
       <div class="field">
-        <label for="emergency">Emergency contact number</label>
-        <input type="tel" id="emergency" placeholder="9000000000">
+        <label for="emergency">Emergency contact number (10 digits)</label>
+        <input type="tel" id="emergency" placeholder="9000000000" maxlength="10" inputmode="numeric" pattern="[0-9]{10}">
       </div>
       <div class="field">
-        <label for="contactEmail">Company contact email</label>
-        <input type="email" id="contactEmail" placeholder="company@example.com">
+        <label for="contactEmail">Company email</label>
+        <input type="email" id="contactEmail" value="rudrageotech@gmail.com">
+      </div>
+      <div class="field">
+        <label for="companyAddress">Company address</label>
+        <textarea id="companyAddress" style="min-height:56px;">Rudra Geotech, Moh. and P.O Sultanpur, Distt. Chamba- 176314</textarea>
       </div>
     </fieldset>
 
@@ -322,15 +298,28 @@ Authorized Use: The ID card is strictly for official use and should not be share
       <div class="card visible" id="cardFront">
         <div class="card-front">
           <div class="front-header" id="frontHeader">
+            <div class="corner-tl"></div>
             <div class="logo-box" id="logoBox"><img id="logoImg"></div>
             <div class="brand">
               <div class="l1" id="pOrgL1">Rudra</div>
               <div class="l2" id="pOrgL2">Geotech</div>
             </div>
             <div class="hex-wrap">
-              <div class="hex-outer"><div class="hex-inner">
-                <img class="hex-photo" id="pPhoto">
-              </div></div>
+              <svg class="hex-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <defs>
+                  <clipPath id="hexClip">
+                    <polygon points="50,10 90,30 90,70 50,90 10,70 10,30"/>
+                  </clipPath>
+                </defs>
+                <polygon points="50,0 100,25 100,75 50,100 0,75 0,25" fill="var(--green)"/>
+                <polygon points="50,6 94,28 94,72 50,94 6,72 6,28" fill="#ffffff"/>
+                <g clip-path="url(#hexClip)">
+                  <rect x="0" y="0" width="100" height="100" fill="#EDEAE1"/>
+                  <circle cx="50" cy="40" r="15" fill="#c9c4b6"/>
+                  <path d="M20 88 Q50 55 80 88 L80 100 L20 100 Z" fill="#c9c4b6"/>
+                  <image id="pPhoto" href="" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice"></image>
+                </g>
+              </svg>
             </div>
           </div>
           <div class="front-body">
@@ -338,14 +327,13 @@ Authorized Use: The ID card is strictly for official use and should not be share
             <div class="id-role-pill" id="pRole">Designation</div>
             <div class="id-details">
               <div class="drow"><b class="lbl">ID No</b><span class="val" id="pEmpId">RG0001</span></div>
-              <div class="drow"><b class="lbl">Mobile</b><span class="val" id="pPhone">—</span></div>
-              <div class="drow"><b class="lbl">Email</b><span class="val" id="pEmail">—</span></div>
-              <div class="drow"><b class="lbl">Blood</b><span class="val" id="pBlood">—</span></div>
-              <div class="drow"><b class="lbl">Valid</b><span class="val" id="pValidUpto">—</span></div>
+              <div class="drow"><b class="lbl">Mobile No.</b><span class="val" id="pPhone">—</span></div>
+              <div class="drow"><b class="lbl">Email Id</b><span class="val" id="pEmail">—</span></div>
+              <div class="drow"><b class="lbl">Blood Group</b><span class="val" id="pBlood">—</span></div>
             </div>
             <div class="id-address">
               <b class="lbl">Address</b>
-              <span class="val" id="pAddress">—</span>
+              <div class="val" id="pAddress">—</div>
             </div>
             <div class="stamp-zone">
               <div class="stamp-circle" id="stampCircle">Company Stamp</div>
@@ -360,17 +348,18 @@ Authorized Use: The ID card is strictly for official use and should not be share
         <div class="card-back">
           <div class="back-header"></div>
           <div class="back-title-wrap">
-            <div class="back-title">Terms &amp;<br>Conditions</div>
+            <div class="back-title">Terms &amp; Conditions</div>
             <div class="back-underline"></div>
           </div>
           <div class="back-instructions" id="bInstructions"></div>
-          <div class="back-idpill-wrap"><div class="back-idpill" id="bEmpId">ID Number: RG0001</div></div>
-          <div class="back-emergency">
-            <div class="lbl">Emergency contact</div>
-            <div class="val" id="bEmergency">—</div>
-          </div>
-          <div class="back-foot">
-            <span id="bContactEmail">—</span>
+          <div class="back-bottom">
+            <div class="valid">Valid upto: <b id="bValidUpto">—</b></div>
+            <div class="back-emergency">
+              <div class="lbl">Emergency Contact</div>
+              <div class="val" id="bEmergency">—</div>
+            </div>
+            <div class="back-company-email" id="bContactEmail">—</div>
+            <div class="back-company-address" id="bCompanyAddress">—</div>
           </div>
           <div class="corner-bl"></div>
           <div class="corner-bl-dot"></div>
@@ -385,15 +374,28 @@ Authorized Use: The ID card is strictly for official use and should not be share
 <script>
 (function(){
   const $ = id => document.getElementById(id);
+  const XLINK = 'http://www.w3.org/1999/xlink';
 
   // ── CONFIG ─────────────────────────────────────────────────────────
-  // Paste your Google Apps Script Web App URL here before sharing this
-  // file with your team (see setup instructions provided separately).
-  // Leave blank to hide the "Save to Company Sheet" button.
+  // 1) Paste your Google Apps Script Web App URL here (see setup docs).
+  //    Leave blank to hide the "Save to Company Sheet" button.
+  // 2) Paste your company logo as a base64 data URL or a hosted https
+  //    image URL to have it appear automatically (no upload needed).
+  // 3) Same for your company stamp image.
   const CONFIG = {
-    GAS_URL: ''  // e.g. 'https://script.google.com/macros/library/d/1xfnOUBwGgx4tO5iTIzGYEXhN9cMS3aita6M4cwxsfzXyT0obmzY4Oo1d/8'
+    GAS_URL: '',          // e.g. 'https://script.google.com/macros/s/AKfycb.../exec'
+    LOGO_DATA_URL: '',    // e.g. 'data:image/png;base64,...' or 'https://.../logo.png'
+    STAMP_DATA_URL: ''    // e.g. 'data:image/png;base64,...' or 'https://.../stamp.png'
   };
   if(!CONFIG.GAS_URL){ $('saveBtn').style.display = 'none'; }
+  if(CONFIG.LOGO_DATA_URL){
+    $('logoImg').src = CONFIG.LOGO_DATA_URL;
+    $('logoBox').style.display = 'flex';
+    $('frontHeader').classList.add('brand-with-logo');
+  }
+  if(CONFIG.STAMP_DATA_URL){
+    $('stampCircle').innerHTML = '<img src="'+CONFIG.STAMP_DATA_URL+'">';
+  }
 
   let uploadedPhotoDataUrl = null;
 
@@ -404,7 +406,15 @@ Authorized Use: The ID card is strictly for official use and should not be share
   $('empId').value = genEmpId();
   $('regenBtn').addEventListener('click', ()=>{ $('empId').value = genEmpId(); render(); });
 
-  const textFields = ['orgL1','orgL2','name','role','empId','phone','email','blood','village','po','distt','instructions','emergency','contactEmail','validUpto'];
+  // digits-only, 10-char cap for phone number fields
+  function digitsOnly10(e){
+    e.target.value = e.target.value.replace(/\D/g,'').slice(0,10);
+    render();
+  }
+  $('phone').addEventListener('input', digitsOnly10);
+  $('emergency').addEventListener('input', digitsOnly10);
+
+  const textFields = ['orgL1','orgL2','name','role','empId','phone','email','blood','village','po','distt','instructions','emergency','contactEmail','validUpto','companyAddress'];
   const defaults = {};
   textFields.forEach(f => defaults[f] = $(f).value);
 
@@ -415,12 +425,19 @@ Authorized Use: The ID card is strictly for official use and should not be share
     return dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
   }
 
-  function buildAddress(){
-    const parts = [];
-    if($('village').value) parts.push('Vill. ' + $('village').value);
-    if($('po').value) parts.push('P.O. ' + $('po').value);
-    if($('distt').value) parts.push('Distt. ' + $('distt').value);
-    return parts.length ? parts.join(', ') : '—';
+  function renderAddress(){
+    const container = $('pAddress');
+    container.innerHTML = '';
+    const lines = [];
+    if($('village').value) lines.push('Village: ' + $('village').value);
+    if($('po').value) lines.push('P.O.: ' + $('po').value);
+    if($('distt').value) lines.push('Distt.: ' + $('distt').value);
+    if(!lines.length){ container.textContent = '—'; return; }
+    lines.forEach(l=>{
+      const d = document.createElement('div');
+      d.textContent = l;
+      container.appendChild(d);
+    });
   }
 
   function render(){
@@ -432,8 +449,7 @@ Authorized Use: The ID card is strictly for official use and should not be share
     $('pPhone').textContent = $('phone').value || '—';
     $('pEmail').textContent = $('email').value || '—';
     $('pBlood').textContent = $('blood').value || '—';
-    $('pValidUpto').textContent = fmtDate($('validUpto').value);
-    $('pAddress').textContent = buildAddress();
+    renderAddress();
 
     $('bInstructions').innerHTML = '';
     ($('instructions').value || '').split(/\n+/).filter(Boolean).forEach(line=>{
@@ -442,45 +458,35 @@ Authorized Use: The ID card is strictly for official use and should not be share
       p.textContent = line;
       $('bInstructions').appendChild(p);
     });
-    $('bEmpId').textContent = 'ID Number: ' + ($('empId').value || '—');
+    $('bValidUpto').textContent = fmtDate($('validUpto').value);
     $('bEmergency').textContent = $('emergency').value || '—';
     $('bContactEmail').textContent = $('contactEmail').value || '—';
+    $('bCompanyAddress').textContent = $('companyAddress').value || '—';
   }
   textFields.forEach(f => $(f).addEventListener('input', render));
   render();
 
-  // generic image upload wiring
-  function wireUpload(inputId, thumbId, hintId, hintHtml, onLoaded){
-    const input = $(inputId), thumb = $(thumbId), hint = $(hintId);
-    input.addEventListener('change', e=>{
-      const file = e.target.files[0];
-      if(!file) return;
-      const reader = new FileReader();
-      reader.onload = ev=>{
-        thumb.src = ev.target.result;
-        thumb.style.display = 'block';
-        hint.innerHTML = hintHtml;
-        onLoaded(ev.target.result);
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-
-  wireUpload('photoInput','photoThumb','photoHint','<b>Photo selected</b><br>tap to change', src=>{
-    const p = $('pPhoto');
-    p.src = src; p.style.backgroundImage = 'none';
-    uploadedPhotoDataUrl = src;
-  });
-
-  wireUpload('logoInput','logoThumb','logoHint','<b>Logo selected</b> — tap to change', src=>{
-    $('logoImg').src = src;
-    $('logoBox').style.display = 'flex';
-    $('frontHeader').classList.add('brand-with-logo');
-  });
-
-  wireUpload('stampInput','stampThumb','stampHint','<b>Stamp selected</b> — tap to change', src=>{
-    const circle = $('stampCircle');
-    circle.innerHTML = '<img src="'+src+'">';
+  // photo upload — writes into the SVG <image> so the hexagon mask
+  // survives PDF export (CSS clip-path is not reliably captured by
+  // html2canvas, but SVG clipPath is).
+  const photoInput = $('photoInput');
+  const photoThumb = $('photoThumb');
+  const photoHint = $('photoHint');
+  photoInput.addEventListener('change', e=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ev=>{
+      const src = ev.target.result;
+      photoThumb.src = src;
+      photoThumb.style.display = 'block';
+      photoHint.innerHTML = '<b>Photo selected</b><br>tap to change';
+      const img = $('pPhoto');
+      img.setAttribute('href', src);
+      img.setAttributeNS(XLINK, 'href', src);
+      uploadedPhotoDataUrl = src;
+    };
+    reader.readAsDataURL(file);
   });
 
   // tabs
@@ -499,18 +505,13 @@ Authorized Use: The ID card is strictly for official use and should not be share
   $('resetBtn').addEventListener('click', ()=>{
     textFields.forEach(f => $(f).value = defaults[f]);
     $('empId').value = genEmpId();
-    ['photo','logo','stamp'].forEach(k=>{
-      $(k+'Thumb').style.display='none';
-      $(k+'Input').value = '';
-    });
-    $('photoHint').innerHTML = '<b>Tap to upload a photo</b><br>from your gallery or camera';
-    $('logoHint').innerHTML = '<b>Upload logo</b> — shown top right';
-    $('stampHint').innerHTML = '<b>Upload stamp image</b> — shown bottom of card';
-    $('pPhoto').removeAttribute('src');
-    $('pPhoto').style.backgroundImage = "url('data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 24 24\\'><circle cx=\\'12\\' cy=\\'8\\' r=\\'4\\' fill=\\'%23c9c4b6\\'/><path d=\\'M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8\\' fill=\\'%23c9c4b6\\'/></svg>')";
-    $('logoBox').style.display = 'none';
-    $('frontHeader').classList.remove('brand-with-logo');
-    $('stampCircle').innerHTML = 'Company Stamp';
+    photoThumb.style.display='none';
+    photoInput.value = '';
+    photoHint.innerHTML = '<b>Tap to upload a photo</b><br>from your gallery or camera';
+    const img = $('pPhoto');
+    img.setAttribute('href','');
+    img.removeAttributeNS(XLINK,'href');
+    uploadedPhotoDataUrl = null;
     render();
     $('statusLine').textContent = '';
   });
